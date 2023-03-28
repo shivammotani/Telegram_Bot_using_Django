@@ -10,7 +10,7 @@ See requirements.txt
 
 ### Step 0 : Clone the Repository
 
-`git clone https://github.com/shivammotani/Telegram_Bot_using_Django.git
+`git clone https://github.com/shivammotani/Telegram_Bot_using_Django.git`
 
 ### Step 1 : Install dependencies
 
