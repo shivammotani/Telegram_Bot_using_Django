@@ -54,7 +54,7 @@ You should now be able to talk to the bot and get responses from it
 Visit http://127.0.0.1:8000/ and see the Query results by all the users in a tabular format.
 Note: You might have to refresh the webpage to see the updated data
 
-####SCREEN SHOTS
+###SCREEN SHOTS
 
 Before Querying Database Status
 
