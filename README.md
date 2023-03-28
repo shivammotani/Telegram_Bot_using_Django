@@ -54,3 +54,17 @@ You should now be able to talk to the bot and get responses from it
 Visit http://127.0.0.1:8000/ and see the Query results by all the users in a tabular format.
 Note: You might have to refresh the webpage to see the updated data
 
+### -------------SCREEN SHOTS-------------
+
+#### 1. Before Querying Database Status
+
+![](Images/Before%20Querying.png)
+
+
+#### 2. Interacting with Bot
+
+![](Images/Bot%20Interacting%20with%20User.png)
+
+#### 3. After Interaction Database Status
+
+![](Images/After%20Interaction.png)
