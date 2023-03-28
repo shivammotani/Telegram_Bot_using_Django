@@ -63,7 +63,7 @@ Note: You might have to refresh the webpage to see the updated data
 
 #### 2. Interacting with Bot
 
-![](Images/Bot%20Interacting%20with%20User.png)
+![](Images/Bot%20Interaction%20with%20User.png)
 
 #### 3. After Interaction Database Status
 
