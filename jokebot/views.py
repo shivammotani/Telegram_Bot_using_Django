@@ -26,7 +26,7 @@ jokes = {
     
 
 
-API_KEY = '6217259155:AAHFFpqdK_BkmqDMPlvS7Q2xUmf1iuBq4WU'
+API_KEY = '<your_botapi_key>'
 
 print('Bot started')
 
