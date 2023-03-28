@@ -2,7 +2,7 @@
 
 # Intro
 
-This is a simple bot that says three different type of jokes 
+This is a simple telegram bot that says three different type of jokes 
 
 # Requirements
 See requirements.txt
