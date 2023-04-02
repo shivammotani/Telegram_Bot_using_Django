@@ -1,11 +1,14 @@
 from django.shortcuts import render
-from .models import noOfCalls
-from telegram.ext import *
-from telegram import *
-import random
+import json
+import requests
+from django.http import HttpResponse,HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from jokebot.cred import TELEGRAM_API_URL
 from jokebot.models import *
 from jokebot.databaseUpdate import *
-# Create your views here.
+from telegram.ext import *
+from telegram import *
+import random 
 
 jokes = {
          'stupid': ["""What did one ocean say to another? --> Nothing, they just waved.""",
@@ -23,12 +26,15 @@ jokes = {
                     """What did one plate whisper to the other plate? --> Dinner is on me.""",
                     """What do you give a sick lemon? --> A Lemon-aid.""",
                     """Why can’t you trust atoms? --> They make up everything."""] }
-    
 
-
-API_KEY = '<your_botapi_key>'
-
-print('Bot started')
+buttons = [
+    [
+        InlineKeyboardButton(text="Stupid",callback_data = "Stupid"),
+        InlineKeyboardButton(text="Dumb",callback_data = "Dumb"),
+        InlineKeyboardButton(text="Fat",callback_data = "Fat")
+    ]
+  ]
+keyboard = InlineKeyboardMarkup(buttons)
 
 def index(request):
     obj = noOfCalls.objects.all()
@@ -37,32 +43,58 @@ def index(request):
         }
     return render(request, "index.html",context)
 
-def handle_message(update, context):
-    text = str(update.message.text).lower()
-    updateDb(update.message.chat_id,text)
-    if(text == 'stupid'):
+def send_message(method, data):
+  return requests.post(TELEGRAM_API_URL + method, data)
+
+
+def buttons(update):
+  chat_id = update['message']['chat']['id']
+  send_message("sendMessage", {
+    'chat_id': chat_id,
+    'text': 'Choose from the following',
+    'reply_markup': json.dumps(eval(str(keyboard)))
+  })
+
+def handle_update(update):
+  chat_id = update['callback_query']['from']['id']
+  text = update['callback_query']['data'].lower()
+  updateDb(chat_id,text)
+  if(text == 'stupid'):
         msg = random.choice(jokes['stupid'])
-        update.message.reply_text(msg)
-    elif(text == 'fat'):
-        msg = random.choice(jokes['fat'])
-        update.message.reply_text(msg)
-    elif(text == 'dumb'):
-        msg = random.choice(jokes['dumb'])
-        update.message.reply_text(msg)
-    else:
-        update.message.reply_text(f"Please select only from the buttons given below:")
-    return
+        send_message("sendMessage", {
+          'chat_id': chat_id,
+          'text': msg,
+          'reply_markup': json.dumps(eval(str(keyboard)))
+        })
 
-def startCommand(update: Update, context: CallbackContext):
-    buttons = [[KeyboardButton("Stupid")],[KeyboardButton("Fat")],[KeyboardButton("Dumb")]]
-    context.bot.send_message(chat_id=update.effective_chat.id, text = "Welcome to the bot",
-                             reply_markup=ReplyKeyboardMarkup(buttons))
+  elif(text == 'fat'):
+      msg = random.choice(jokes['fat'])
+      send_message("sendMessage", {
+          'chat_id': chat_id,
+          'text': msg,
+          'reply_markup': json.dumps(eval(str(keyboard)))
+        })
+  elif(text == 'dumb'):
+      msg = random.choice(jokes['dumb'])
+      send_message("sendMessage", {
+          'chat_id': chat_id,
+          'text': msg,
+          'reply_markup': json.dumps(eval(str(keyboard)))
+        })
+
+
+@csrf_exempt
+def telegram_bot(request):
+  if request.method == 'POST':
+    update = json.loads(request.body.decode('utf-8'))
+    try: 
+      update['message']
+      buttons(update)
+    except:
+      handle_update(update)
+    return HttpResponse('ok')
+  else:
+    return HttpResponseBadRequest('Bad Request')
 
 
 
-updater = Updater(API_KEY,use_context=True)
-dp = updater.dispatcher
-dp.add_handler(CommandHandler("start", startCommand))
-dp.add_handler(MessageHandler(Filters.text, handle_message))
-
-updater.start_polling(1.0)
