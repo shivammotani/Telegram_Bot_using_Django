@@ -12,9 +12,21 @@ See requirements.txt
 
 `git clone https://github.com/shivammotani/Telegram_Bot_using_Django.git`
 
-### Step 1 : Install dependencies
+### Step 1 : Install Requirements and Dependencies
+I'm using pipenv as a virtual environment manager. You can use any other virtual environments as you like.
+If you want to use any other virtual environment manager apart from pipenv, here are the steps to generate req.txt from the pipfile:
+  * `pip install pipenv`
+  * `pipenv requirements > requirements.txt`
 
-`pip install -r requirements.txt`
+Since for this approcah you'll have to install pipenv which obviously you don't want if you're reading this line. Therefore, i'll upload requirements.txt separately for the reference but i'll still suggest you to use
+pipenv. It makes managing virtual env and dependencies a lot easier.
+For those who want to use pipenv only. Follow these steps:
+
+Goto your directory where you've cloned this repository and open up your terminal and run the below commands:
+  * `pipenv shell`
+  * `pipenv sync`
+ 
+Voila! Your virtual env is started and ready with all the dependencies required to run this repository.
 
 ### Step 2 : Install and Setup PostGresSQL
 You need to install and configure your postgresql and add the connection details in settings.py file.
